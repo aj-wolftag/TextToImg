@@ -1,7 +1,7 @@
 import os, io
 from google.cloud import vision
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS']= r'numberplaterec-304907-846c2ebc7a5d.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS']= r'numberpltdetect-a8d863127b3b.json'
 client = vision.ImageAnnotatorClient()
 
 path = "imgs/vehicle_car_3.jpg"
@@ -17,10 +17,10 @@ print('Texts:')
 for text in texts:
         print('\n"{}"'.format(text.description))
 
-        vertices = (['({},{})'.format(vertex.x, vertex.y)
-                    for vertex in text.bounding_poly.vertices])
+        #vertices = (['({},{})'.format(vertex.x, vertex.y)
+                    #for vertex in text.bounding_poly.vertices])
 
-        print('bounds: {}'.format(','.join(vertices)))
+        #print('bounds: {}'.format(','.join(vertices)))
 
 if response.error.message:
         raise Exception(
