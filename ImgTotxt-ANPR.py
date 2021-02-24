@@ -1,10 +1,14 @@
 import os, io
 from google.cloud import vision
+from saveIntoJson import parseData
+import json
+import pandas as pd
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS']= r'numberpltdetect-a8d863127b3b.json'
 client = vision.ImageAnnotatorClient()
 
-path = "imgs/vehicle_car_3.jpg"
+path = "imgs/test-plate-img.jpeg"
+
 
 with io.open(path,'rb') as image_file:
     content = image_file.read()
@@ -12,15 +16,20 @@ with io.open(path,'rb') as image_file:
 image = vision.Image(content=content)
 response = client.text_detection(image=image)
 texts = response.text_annotations
-print('Texts:')
+df = pd.DataFrame(columns=['locale','description'])
 
 for text in texts:
-        print('\n"{}"'.format(text.description))
-
-        #vertices = (['({},{})'.format(vertex.x, vertex.y)
-                    #for vertex in text.bounding_poly.vertices])
-
-        #print('bounds: {}'.format(','.join(vertices)))
+    df = df.append(
+        dict(
+            locale = text.locale,
+            description = text.description
+        ),
+        ignore_index = True
+    )
+    
+print('Texts:')
+print(df)
+parseData(df)
 
 if response.error.message:
         raise Exception(
